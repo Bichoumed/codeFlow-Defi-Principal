@@ -1,0 +1,408 @@
+/* ==========================================
+   BATTLE ANIMATIONS - Add to style.css
+   ========================================== */
+
+/* Battle Overlay */
+.battle-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    z-index: 200;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.battle-overlay.active {
+    display: flex;
+    animation: fadeIn 0.5s ease;
+}
+
+/* Battle Arena */
+.battle-arena {
+    width: 100%;
+    max-width: 900px;
+    height: 500px;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 80px;
+    padding: 0 60px;
+}
+
+/* Ground Line */
+.battle-ground {
+    position: absolute;
+    bottom: 80px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: #2c2c2c;
+}
+
+/* Battle Title */
+.battle-title {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.battle-title h2 {
+    font-size: 3rem;
+    color: #f0f6fc;
+    margin-bottom: 8px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.battle-title p {
+    color: #8b949e;
+    font-size: 1.1rem;
+}
+
+/* Fighters Container */
+.fighter-container {
+    position: relative;
+    margin-bottom: 80px;
+    transition: transform 0.2s ease;
+}
+
+.fighter-container.attacking-right {
+    animation: attackRight 0.3s ease;
+}
+
+.fighter-container.attacking-left {
+    animation: attackLeft 0.3s ease;
+}
+
+.fighter-container.hit {
+    animation: hitShake 0.2s ease;
+}
+
+@keyframes attackRight {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(40px); }
+}
+
+@keyframes attackLeft {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(-40px); }
+}
+
+@keyframes hitShake {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-10deg); }
+    75% { transform: rotate(10deg); }
+}
+
+/* Speech Bubbles */
+.speech-bubble {
+    position: absolute;
+    top: -140px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 240px;
+    padding: 16px 20px;
+    border-radius: 20px;
+    border: 4px solid #2c2c2c;
+    box-shadow: 4px 4px 0px rgba(0,0,0,0.3);
+    opacity: 0;
+    animation: bubblePop 0.5s ease forwards;
+    z-index: 10;
+}
+
+.speech-bubble.nird-bubble {
+    background: white;
+    color: #1f2937;
+}
+
+.speech-bubble.bigtech-bubble {
+    background: #1f2937;
+    color: white;
+}
+
+.speech-bubble p {
+    text-align: center;
+    font-size: 0.95rem;
+    line-height: 1.4;
+}
+
+.speech-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-top: 20px solid white;
+}
+
+.speech-bubble.bigtech-bubble::after {
+    border-top-color: #1f2937;
+}
+
+@keyframes bubblePop {
+    0% { opacity: 0; transform: translateX(-50%) scale(0.5) translateY(20px); }
+    100% { opacity: 1; transform: translateX(-50%) scale(1) translateY(0); }
+}
+
+/* Health Bars */
+.health-bars {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    margin-bottom: 30px;
+    width: 100%;
+    max-width: 700px;
+}
+
+.health-bar-container {
+    flex: 1;
+    max-width: 280px;
+}
+
+.health-bar-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.health-bar-label.right {
+    justify-content: flex-end;
+}
+
+.health-bar-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+}
+
+.health-bar-icon.nird { background: var(--nird-green); }
+.health-bar-icon.bigtech { background: #dc2626; }
+
+.health-bar-label span {
+    color: #d1d5db;
+    font-weight: 500;
+}
+
+.health-bar {
+    height: 28px;
+    background: #374151;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 3px solid #2c2c2c;
+}
+
+.health-bar-fill {
+    height: 100%;
+    transition: width 0.3s ease;
+    border-radius: 20px;
+}
+
+.health-bar-fill.nird { background: linear-gradient(90deg, var(--nird-green), var(--nird-teal)); }
+.health-bar-fill.bigtech { background: linear-gradient(90deg, #dc2626, #ef4444); }
+
+/* Victory Scene */
+.victory-scene {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.victory-scene.active {
+    display: flex;
+    animation: fadeIn 0.5s ease;
+}
+
+.defeated-fighter {
+    position: absolute;
+    bottom: 0;
+    transform: rotate(90deg);
+    opacity: 0.6;
+}
+
+.winner-fighter {
+    position: relative;
+    animation: winnerBounce 1s ease;
+}
+
+@keyframes winnerBounce {
+    0% { transform: translateY(50px) scale(0.8); }
+    60% { transform: translateY(-20px) scale(1.05); }
+    100% { transform: translateY(0) scale(1); }
+}
+
+.victory-bubble {
+    position: absolute;
+    top: -160px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fef3c7;
+    padding: 20px 24px;
+    border-radius: 20px;
+    border: 4px solid #2c2c2c;
+    box-shadow: 4px 4px 0px rgba(0,0,0,0.3);
+    text-align: center;
+    min-width: 200px;
+}
+
+.victory-bubble .emojis {
+    font-size: 2.5rem;
+    margin-bottom: 8px;
+}
+
+.victory-bubble p {
+    color: #1f2937;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+/* Result Popup */
+.result-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(13, 17, 23, 0.95);
+    backdrop-filter: blur(8px);
+    z-index: 250;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.result-popup.active {
+    display: flex;
+    animation: fadeIn 0.3s ease;
+}
+
+.result-popup-content {
+    background: var(--bg-secondary);
+    border: 3px solid var(--border-color);
+    border-radius: var(--border-radius-xl);
+    padding: 2.5rem;
+    max-width: 450px;
+    width: 100%;
+    text-align: center;
+    animation: popIn 0.4s ease;
+}
+
+.result-popup-content.win {
+    border-color: var(--nird-green);
+    box-shadow: 0 0 40px rgba(46, 204, 113, 0.3);
+}
+
+.result-popup-content.lose {
+    border-color: var(--accent-error);
+    box-shadow: 0 0 40px rgba(231, 76, 60, 0.3);
+}
+
+.result-popup .result-icon {
+    font-size: 5rem;
+    margin-bottom: 1rem;
+}
+
+.result-popup .result-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.result-popup-content.win .result-title {
+    color: var(--nird-green);
+}
+
+.result-popup-content.lose .result-title {
+    color: var(--accent-error);
+}
+
+.result-popup .result-message {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+/* POW Effect */
+.pow-effect {
+    position: absolute;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #fbbf24;
+    text-shadow: 2px 2px 0px #f59e0b;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.pow-effect.active {
+    animation: powPop 0.4s ease forwards;
+}
+
+@keyframes powPop {
+    0% { opacity: 0; transform: scale(0.5); }
+    50% { opacity: 1; transform: scale(1.3); }
+    100% { opacity: 0; transform: scale(1.5) translateY(-20px); }
+}
+
+/* Skip Battle Button */
+.skip-battle-btn {
+    position: absolute;
+    bottom: 30px;
+    right: 30px;
+    padding: 10px 20px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 8px;
+    color: #8b949e;
+    font-family: var(--font-primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.skip-battle-btn:hover {
+    background: rgba(255,255,255,0.2);
+    color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .battle-arena {
+        gap: 40px;
+        padding: 0 20px;
+        height: 400px;
+    }
+    
+    .battle-title h2 {
+        font-size: 2rem;
+    }
+    
+    .health-bars {
+        flex-direction: column;
+        gap: 15px;
+        padding: 0 20px;
+    }
+    
+    .health-bar-container {
+        max-width: 100%;
+    }
+    
+    .speech-bubble {
+        width: 180px;
+        padding: 12px 16px;
+        top: -120px;
+    }
+    
+    .fighter-container svg {
+        width: 80px;
+        height: 120px;
+    }
+}

@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NIRD Quest - Le Village Numérique Résistant</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/battle-animations.css">
+    <!-- Caveat Font from Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&family=Indie+Flower&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Particles Background -->
+    <div class="particles" id="particles"></div>
+    
+    <!-- Main Container -->
+    <div class="app-container">
+        
+        <!-- Screen 1: Welcome -->
+        <section id="welcome-screen" class="screen active">
+            <div class="logo-container animate-float">
+                <div class="logo">
+                    <span class="logo-n">N</span>
+                    <span class="logo-i">I</span>
+                    <span class="logo-r">R</span>
+                    <span class="logo-d">D</span>
+                </div>
+                <div class="logo-subtitle">Numérique Inclusif Responsable Durable</div>
+            </div>
+            
+            <h1 class="main-title animate-slide-up">
+                <span class="title-line">Le Village</span>
+                <span class="title-line accent">Numérique Résistant</span>
+            </h1>
+            
+            <p class="tagline animate-fade-in">
+                🏰 Astérix contre l'Empire numérique
+            </p>
+            
+            <div class="welcome-description animate-fade-in-delay">
+                <p>Votre établissement scolaire peut-il résister aux Big Tech ?</p>
+                <p>Testez vos connaissances et affrontez les géants du numérique !</p>
+            </div>
+            
+            <div class="coin-preview animate-pulse">
+                <div class="coin-icon">🪙</div>
+                <span>Gagnez des NIRD Coins et faites triompher le numérique responsable !</span>
+            </div>
+            
+            <button class="btn-primary animate-bounce-in" onclick="startGame()">
+                <span class="btn-icon">⚔️</span>
+                Commencer le Combat
+                <span class="btn-arrow">→</span>
+            </button>
+            
+            <div class="footer-links">
+                <a href="#" onclick="showLearnMore()">En savoir plus sur NIRD</a>
+                <span class="separator">•</span>
+                <a href="https://nird.forge.apps.education.fr/" target="_blank">Site officiel</a>
+            </div>
+        </section>
+        
+        <!-- Screen 2: Quiz Game -->
+        <section id="game-screen" class="screen">
+            <header class="game-header">
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                    <span class="progress-text" id="progress-text">Question 1/10</span>
+                </div>
+                
+                <div class="score-display">
+                    <div class="coin-counter">
+                        <span class="coin-icon-small">🪙</span>
+                        <span id="score">0</span>
+                        <span class="coin-label">NIRD Coins</span>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Battle Arena -->
+            <div id="battle-arena">
+                <!-- Battle content will be injected by JS -->
+            </div>
+            
+            <main class="question-container">
+                <div class="question-card" id="question-card">
+                    <div class="question-number" id="question-number">Q1</div>
+                    <h2 class="question-text" id="question-text">
+                        Chargement de la question...
+                    </h2>
+                    
+                    <div class="scenario-context" id="scenario-context">
+                        <!-- Context will be injected here -->
+                    </div>
+                </div>
+                
+                <div class="choices-container" id="choices-container">
+                    <!-- Choices will be injected here -->
+                </div>
+            </main>
+            
+            <!-- Feedback Modal -->
+            <div class="feedback-modal" id="feedback-modal">
+                <div class="feedback-content" id="feedback-content">
+                    <div class="feedback-icon" id="feedback-icon">✓</div>
+                    <h3 class="feedback-title" id="feedback-title">Bonne réponse !</h3>
+                    <div class="points-change" id="points-change">+40 🪙</div>
+                    
+                    <div class="nird-card" id="nird-card">
+                        <div class="nird-card-header">
+                            <span class="nird-badge">💡 Carte NIRD</span>
+                        </div>
+                        <div class="nird-card-content" id="nird-card-content">
+                            <!-- NIRD info will be injected here -->
+                        </div>
+                    </div>
+                    
+                    <button class="btn-secondary" onclick="nextQuestion()">
+                        Continuer
+                        <span class="btn-arrow">→</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Screen 3: Results -->
+        <section id="results-screen" class="screen">
+            <div class="results-container">
+                <div class="rank-badge animate-pop" id="rank-badge">
+                    <!-- Rank icon will be injected -->
+                </div>
+                
+                <h2 class="results-title" id="results-title">Félicitations !</h2>
+                
+                <div class="final-score">
+                    <div class="score-circle" id="score-circle">
+                        <span class="score-value" id="final-score">0</span>
+                        <span class="score-label">NIRD Coins</span>
+                    </div>
+                </div>
+                
+                <div class="rank-title" id="rank-title">
+                    <!-- Rank title will be injected -->
+                </div>
+                
+                <div class="rank-description" id="rank-description">
+                    <!-- Rank description will be injected -->
+                </div>
+                
+                <!-- Winner Display -->
+                <div id="winner-display">
+                    <!-- Battle winner will be displayed here -->
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-icon">✅</span>
+                        <span class="stat-value" id="correct-count">0</span>
+                        <span class="stat-label">Bonnes réponses</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-icon">❌</span>
+                        <span class="stat-value" id="wrong-count">0</span>
+                        <span class="stat-label">À améliorer</span>
+                    </div>
+                </div>
+                
+                <div class="results-actions">
+                    <button class="btn-primary" onclick="restartGame()">
+                        <span class="btn-icon">🔄</span>
+                        Rejouer
+                    </button>
+                    <button class="btn-secondary" onclick="showLearnMore()">
+                        <span class="btn-icon">📚</span>
+                        En savoir plus sur NIRD
+                    </button>
+                </div>
+                
+                <div class="share-section">
+                    <p>Partagez votre résultat :</p>
+                    <div class="share-buttons">
+                        <button class="share-btn" onclick="shareResult()">
+                            📤 Partager
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Screen 4: Learn NIRD -->
+        <section id="learn-screen" class="screen">
+            <button class="back-btn" onclick="goBack()">
+                ← Retour
+            </button>
+            
+            <h2 class="learn-title">
+                <span class="learn-icon">🌱</span>
+                Découvrez la démarche NIRD
+            </h2>
+            
+            <div class="pillars-grid">
+                <div class="pillar-card" data-pillar="n">
+                    <div class="pillar-icon">🔢</div>
+                    <h3>Numérique</h3>
+                    <p>Adopter des outils numériques libres et ouverts pour une meilleure maîtrise technologique.</p>
+                    <ul class="pillar-examples">
+                        <li>Linux au lieu de Windows</li>
+                        <li>LibreOffice au lieu de Microsoft Office</li>
+                        <li>Firefox au lieu de Chrome</li>
+                    </ul>
+                </div>
+                
+                <div class="pillar-card" data-pillar="i">
+                    <div class="pillar-icon">🤝</div>
+                    <h3>Inclusif</h3>
+                    <p>Rendre le numérique accessible à tous, en luttant contre la fracture numérique.</p>
+                    <ul class="pillar-examples">
+                        <li>Reconditionnement pour les familles</li>
+                        <li>Outils d'accessibilité intégrés</li>
+                        <li>Formation pour tous</li>
+                    </ul>
+                </div>
+                
+                <div class="pillar-card" data-pillar="r">
+                    <div class="pillar-icon">🛡️</div>
+                    <h3>Responsable</h3>
+                    <p>Protéger les données personnelles et s'émanciper des géants du numérique.</p>
+                    <ul class="pillar-examples">
+                        <li>Respect du RGPD</li>
+                        <li>Pas de collecte de données</li>
+                        <li>Souveraineté numérique</li>
+                    </ul>
+                </div>
+                
+                <div class="pillar-card" data-pillar="d">
+                    <div class="pillar-icon">♻️</div>
+                    <h3>Durable</h3>
+                    <p>Prolonger la vie des équipements et réduire l'empreinte écologique.</p>
+                    <ul class="pillar-examples">
+                        <li>Reconditionnement des PC</li>
+                        <li>Linux prolonge la vie de 5-10 ans</li>
+                        <li>Sobriété numérique</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="cta-section">
+                <h3>Rejoignez le mouvement !</h3>
+                <p>Plus de 12 lycées, 5 collèges et 2 écoles sont déjà engagés dans la démarche NIRD.</p>
+                <div class="cta-buttons">
+                    <a href="https://nird.forge.apps.education.fr/" target="_blank" class="btn-primary">
+                        Visiter le site NIRD
+                    </a>
+                    <a href="https://nird.forge.apps.education.fr/pilotes/" target="_blank" class="btn-secondary">
+                        Voir les établissements pilotes
+                    </a>
+                </div>
+            </div>
+        </section>
+        <!-- ==========================================
+     ADD THIS HTML TO index.html
+     Location: Inside .app-container, after all screens, before </div>
+     ========================================== -->
+
+<!-- Battle Animation Overlay -->
+<div class="battle-overlay" id="battle-overlay">
+    <!-- Battle Title -->
+    <div class="battle-title">
+        <h2 id="battle-title-text">Epic Showdown</h2>
+        <p id="battle-subtitle">The battle begins...</p>
+    </div>
+    
+    <!-- Health Bars (shown during fight phase) -->
+    <div class="health-bars" id="health-bars" style="display: none;">
+        <div class="health-bar-container">
+            <div class="health-bar-label">
+                <div class="health-bar-icon nird"></div>
+                <span>NIRD</span>
+            </div>
+            <div class="health-bar">
+                <div class="health-bar-fill nird" id="nird-health" style="width: 100%;"></div>
+            </div>
+        </div>
+        <div class="health-bar-container">
+            <div class="health-bar-label right">
+                <span>Big Tech</span>
+                <div class="health-bar-icon bigtech"></div>
+            </div>
+            <div class="health-bar">
+                <div class="health-bar-fill bigtech" id="bigtech-health" style="width: 100%;"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Battle Arena -->
+    <div class="battle-arena" id="battle-arena">
+        <div class="battle-ground"></div>
+        
+        <!-- NIRD Fighter (Left) -->
+        <div class="fighter-container" id="nird-fighter">
+            <div class="speech-bubble nird-bubble" id="nird-speech" style="display: none;">
+                <p>I fight for freedom and sustainability!</p>
+            </div>
+            <svg width="120" height="180" viewBox="0 0 120 180" id="nird-svg">
+                <!-- Hat -->
+                <g class="fighter-hat">
+                    <path d="M 40 25 Q 38 22 42 20 L 75 18 Q 78 20 76 24 L 72 35 L 44 37 Z"
+                        fill="#2ECC71" stroke="#2c2c2c" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </g>
+                <!-- Head -->
+                <circle cx="60" cy="50" r="18" fill="white" stroke="#2c2c2c" stroke-width="3"/>
+                <!-- Eyes -->
+                <circle cx="53" cy="48" r="3" fill="#2c2c2c" class="eye-normal"/>
+                <circle cx="67" cy="48" r="3" fill="#2c2c2c" class="eye-normal"/>
+                <!-- Happy eyes (hidden by default) -->
+                <path d="M 48 48 Q 53 51 58 48" stroke="#2c2c2c" stroke-width="3" fill="none" stroke-linecap="round" class="eye-happy" style="display: none;"/>
+                <path d="M 62 48 Q 67 51 72 48" stroke="#2c2c2c" stroke-width="3" fill="none" stroke-linecap="round" class="eye-happy" style="display: none;"/>
+                <!-- Victory smile (hidden by default) -->
+                <path d="M 48 56 Q 60 64 72 56" stroke="#2c2c2c" stroke-width="2.5" fill="none" stroke-linecap="round" class="mouth-happy" style="display: none;"/>
+                <!-- Body -->
+                <path d="M 60 68 Q 62 90 60 110" stroke="#2c2c2c" stroke-width="3" fill="none" stroke-linecap="round" class="body"/>
+                <!-- Arms -->
+                <path d="M 60 75 Q 40 80 35 95" stroke="#2c2c2c" stroke-width="3" fill="none" stroke-linecap="round" class="left-arm"/>
+                <path d="M 60 75 Q 80 80 85 95" stroke="#2c2c2c" stroke-width="3" fill="none" stroke-linecap="round" class="right-arm"/>
+                <!-- Legs -->
+                <path d="M 60 110 Q 50 130 45 150" stroke="#2c2c2c" stroke-width="3" fill="none" stroke-linecap="round" class="left-leg"/>
+                <path d="M 60 110 Q 70 130 75 150" stroke="#2c2c2c" stroke-width="3" fill="none" stroke-linecap="round" class="right-leg"/>
+            </svg>
+            <div class="pow-effect" id="nird-pow">POW!</div>
+        </div>
+        
+        <!-- Big Tech Fighter (Right) -->
+        <div class="fighter-container" id="bigtech-fighter" style="transform: scaleX(-1);">
+            <div class="speech-bubble bigtech-bubble" id="bigtech-speech" style="display: none; transform: scaleX(-1);">
+                <p>Your data belongs to us! Resistance is futile!</p>
+            </div>
+            <svg width="120" height="180" viewBox="0 0 120 180" id="bigtech-svg">
+                <!-- Devil Horns -->
+                <g class="fighter-hat">
+                    <path d="M 45 35 Q 42 25 38 20 Q 40 22 45 30" fill="#dc2626" stroke="#2c2c2c" stroke-width="2.5"/>
+                    <path d="M 75 35 Q 78 25 82 20 Q 80 22 75 30" fill="#dc2626" stroke="#2c2c2c" stroke-width="2.5"/>
+                </g>
+                <!-- Head -->
+                <circle cx="60" cy="50" r="18" fill="#d1d5db" stroke="#2c2c2c" stroke-width="3"/>
+                <!-- Evil Eyes -->
+                <path d="M 48 46 L 56 50 M 48 50 L 56 48" stroke="#dc2626" stroke-width="3" stroke-linecap="round" class="eye-evil"/>
+                <path d="M 64 46 L 72 50 M 64 50 L 72 48" stroke="#dc2626" stroke-width="3" stroke-linecap="round" class="eye-evil"/>
+                <circle cx="52" cy="48" r="2" fill="#dc2626"/>
+                <circle cx="68" cy="48" r="2" fill="#dc2626"/>
+                <!-- X eyes for defeated (hidden) -->
+                <path d="M 49 46 L 57 52 M 49 52 L 57 46" stroke="#2c2c2c" stroke-width="3" stroke-linecap="round" class="eye-defeated" style="display: none;"/>
+                <path d="M 63 46 L 71 52 M 63 52 L 71 46" stroke="#2c2c2c" stroke-width="3" stroke-linecap="round" class="eye-defeated" style="display: none;"/>
+                <!-- Evil Eyebrows -->
+                <path d="M 46 43 Q 50 40 54 42" stroke="#2c2c2c" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                <path d="M 66 42 Q 70 40 74 43" stroke="#2c2c2c" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                <!-- Evil Grin -->
+                <path d="M 48 56 Q 60 62 72 56" stroke="#2c2c2c" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+                <path d="M 54 58 L 54 60 M 60 59 L 60 61 M 66 58 L 66 60" stroke="#2c2c2c" stroke-width="2" stroke-linecap="round"/>
+                <!-- Body -->
+                <path d="M 60 68 Q 62 90 60 110" stroke="#2c2c2c" stroke-width="3" fill="none" stroke-linecap="round" class="body"/>
+                <!-- Arms -->
+                <path d="M 60 75 Q 40 80 35 95" stroke="#2c2c2c" stroke-width="3" fill="none" stroke-linecap="round" class="left-arm"/>
+                <path d="M 60 75 Q 80 80 85 95" stroke="#2c2c2c" stroke-width="3" fill="none" stroke-linecap="round" class="right-arm"/>
+                <!-- Legs -->
+                <path d="M 60 110 Q 50 130 45 150" stroke="#2c2c2c" stroke-width="3" fill="none" stroke-linecap="round" class="left-leg"/>
+                <path d="M 60 110 Q 70 130 75 150" stroke="#2c2c2c" stroke-width="3" fill="none" stroke-linecap="round" class="right-leg"/>
+            </svg>
+            <div class="pow-effect" id="bigtech-pow" style="transform: scaleX(-1);">POW!</div>
+        </div>
+    </div>
+    
+    <!-- Skip Button -->
+    <button class="skip-battle-btn" id="skip-battle" onclick="skipBattle()">Skip ⏭️</button>
+</div>
+
+<!-- Result Popup (Win/Lose message) -->
+<div class="result-popup" id="result-popup">
+    <div class="result-popup-content" id="result-popup-content">
+        <div class="result-icon" id="result-icon">🎉</div>
+        <h3 class="result-title" id="result-title">NIRD Wins!</h3>
+        <p class="result-message" id="result-message">
+            Yeay! You're on the right path to digital resistance!
+        </p>
+        <button class="btn-primary" onclick="closeResultPopup()">
+            Continue <span class="btn-arrow">→</span>
+        </button>
+    </div>
+</div>
+    </div>
+    
+    <!-- Audio effects (optional) -->
+    <audio id="sound-correct" preload="auto">
+        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2teleQYPaL/teleQJyGr+mV1v" type="audio/wav">
+    </audio>
+    <audio id="sound-wrong" preload="auto">
+        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2teleQYPaL/teleQJyGr+mV1v" type="audio/wav">
+    </audio>
+    
+    <script src="js/questions.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/battle.js"></script>
+    <script src="js/animations.js"></script>
+</body>
+</html>
