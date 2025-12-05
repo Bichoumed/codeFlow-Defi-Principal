@@ -13,7 +13,9 @@ let gameState = {
     answeredQuestions: [],
     isAnimating: false,
     previousScreen: 'welcome',
-    battleResult: null
+    battleResult: null,
+    currentLevel: 1, // ADD THIS
+    totalLevels: 4   // ADD THIS
 };
 
 // DOM Elements
@@ -74,6 +76,101 @@ function showScreen(screenName) {
 }
 
 /* ==========================================
+   Level Progress Management
+   ========================================== */
+
+function showLevelProgress() {
+    const levelProgress = document.getElementById('level-progress');
+    if (levelProgress) {
+        levelProgress.style.display = 'block';
+    }
+}
+
+function hideLevelProgress() {
+    const levelProgress = document.getElementById('level-progress');
+    if (levelProgress) {
+        levelProgress.style.display = 'none';
+    }
+}
+
+function updateLevelProgress() {
+    const levelName = document.getElementById('current-level-name');
+    if (levelName) {
+        const levels = [
+            { name: 'Level 1: Basics', icon: '⚔️' },
+            { name: 'Level 2: Advanced', icon: '🛡️' },
+            { name: 'Level 3: Expert', icon: '👑' },
+            { name: 'Level 4: Master', icon: '🏆' }
+        ];
+        
+        if (gameState.currentLevel <= levels.length) {
+            levelName.textContent = levels[gameState.currentLevel - 1].name;
+            
+            // Update icon
+            const iconElement = document.querySelector('.current-level-icon');
+            if (iconElement) {
+                iconElement.textContent = levels[gameState.currentLevel - 1].icon;
+            }
+        }
+    }
+    
+    // Update unlocked levels
+    updateUnlockedLevels();
+}
+
+function updateUnlockedLevels() {
+    const levelItems = document.querySelectorAll('.next-level-item');
+    levelItems.forEach((item, index) => {
+        const level = index + 2; // Levels start at 2 for next-level-items
+        
+        // Unlock levels based on score or completion
+        // For now, let's unlock all levels (you can add conditions later)
+        if (level <= gameState.currentLevel + 1) {
+            item.classList.remove('locked');
+            item.classList.add('unlocked');
+            item.onclick = () => switchLevel(level);
+        } else {
+            item.classList.add('locked');
+            item.classList.remove('unlocked');
+            item.onclick = null;
+        }
+    });
+}
+
+function toggleLevelProgress() {
+    const levelProgress = document.getElementById('level-progress');
+    if (levelProgress) {
+        levelProgress.classList.toggle('expanded');
+        levelProgress.classList.toggle('collapsed');
+    }
+}
+
+function switchLevel(level) {
+    if (level <= gameState.totalLevels && level !== gameState.currentLevel) {
+        // Save current progress
+        const confirmSwitch = confirm(`Switch to Level ${level}? Your current progress will be saved.`);
+        
+        if (confirmSwitch) {
+            gameState.currentLevel = level;
+            updateLevelProgress();
+            
+            // Reset current question for new level
+            gameState.currentQuestion = 0;
+            
+            // Get new questions for this level
+            // You can create different question sets per level
+            questions = getRandomQuestions(10);
+            
+            // Reload first question
+            loadQuestion();
+            
+            // Collapse the menu
+            toggleLevelProgress();
+        }
+    }
+}
+
+/* ==========================================
    Game Functions
    ========================================== */
 
@@ -91,7 +188,9 @@ async function startGame() {
         answeredQuestions: [],
         isAnimating: false,
         previousScreen: 'welcome',
-        battleResult: null
+        battleResult: null,
+        currentLevel: 1,
+        totalLevels: 4
     };
     
     // Reset battle intro flag
@@ -105,7 +204,11 @@ async function startGame() {
     // Show game screen
     showScreen('game');
     
-    // CHANGE: Show intro battle BEFORE first question
+    // ADD THESE TWO LINES:
+    showLevelProgress();
+    updateLevelProgress();
+    
+    // Show intro battle BEFORE first question
     if (typeof showIntroBattle === 'function') {
         await showIntroBattle();
     }
@@ -268,17 +371,24 @@ function nextQuestion() {
     gameState.isAnimating = false;
     
     // Check if game is over
-    if (gameState.currentQuestion >= questions.length - 1) {
-        // Show results
-        setTimeout(() => {
-            showResults();
-        }, 300);
+if (gameState.currentQuestion >= questions.length - 1) {
+        // Check if this is Level 1 ending
+        if (gameState.currentLevel === 1) {
+            setTimeout(() => {
+                showResultsWithLevel2Option();
+            }, 300);
+        } else {
+            setTimeout(() => {
+                showResults();
+            }, 300);
+        }
     } else {
         // Load next question
         gameState.currentQuestion++;
         loadQuestion();
     }
 }
+
 
 function updateProgress() {
     const progress = ((gameState.currentQuestion + 1) / questions.length) * 100;
@@ -322,6 +432,7 @@ function animateScoreChange(points) {
 function showResults() {
     showScreen('results');
     
+    hideLevelProgress();
     // Get rank based on score
     const rank = getRank(gameState.score);
     
@@ -367,6 +478,79 @@ function showResults() {
     if (gameState.score >= 250 || nirdWins) {
         createConfetti();
     }
+
+
+}
+
+
+    /* ==========================================
+   Level 2 Transition Functions
+   ========================================== */
+
+function showResultsWithLevel2Option() {
+    showScreen('results');
+    hideLevelProgress();
+    
+    const rank = getRank(gameState.score);
+    
+    resultElements.rankBadge.textContent = rank.icon;
+    resultElements.resultsTitle.textContent = 'Niveau 1 Terminé !';
+    resultElements.finalScore.textContent = gameState.score;
+    resultElements.rankTitle.textContent = rank.title;
+    resultElements.rankDescription.textContent = rank.description;
+    resultElements.correctCount.textContent = gameState.correctAnswers;
+    resultElements.wrongCount.textContent = gameState.wrongAnswers;
+    
+    const nirdWins = gameState.correctAnswers > gameState.wrongAnswers;
+    
+    const winnerDisplay = resultElements.winnerDisplay;
+    if (winnerDisplay) {
+        const winnerHTML = nirdWins 
+            ? `<div class="winner-announcement nird-wins">
+                    <div class="winner-fighter">${createStickFigureSVG('nird', false)}</div>
+                    <h3>🎉 NIRD Triomphe au Niveau 1 !</h3>
+                    <p>Prêt pour le défi financier ?</p>
+               </div>`
+            : `<div class="winner-announcement bigtech-wins">
+                    <div class="winner-fighter">${createStickFigureSVG('bigtech', false)}</div>
+                    <h3>😔 Big Tech l'emporte au Niveau 1...</h3>
+                    <p>Tentez le Niveau 2 !</p>
+               </div>`;
+        
+        winnerDisplay.innerHTML = winnerHTML + `
+            <div class="level2-cta" style="margin-top: 1.5rem;">
+                <button class="btn-primary level2-btn" onclick="startLevel2()">
+                    <span class="btn-icon">🏢</span>
+                    Niveau 2: Défis Financiers
+                    <span class="btn-arrow">→</span>
+                </button>
+            </div>
+        `;
+    }
+    
+    if (gameState.score >= 250 || nirdWins) {
+        createConfetti();
+    }
+}
+
+function startLevel2() {
+    // Update to Level 2
+    gameState.currentLevel = 2;
+    gameState.currentQuestion = 0;
+    gameState.correctAnswers = 0;
+    gameState.wrongAnswers = 0;
+    gameState.answeredQuestions = [];
+    
+    // Load Level 2 questions
+    questions = getLevel2Questions(10);
+    
+    // Hide all screens, show Level 2 battle overlay
+    Object.values(screens).forEach(s => s.classList.remove('active'));
+    
+    // Initialize and show Level 2
+    if (typeof initLevel2Game === 'function') {
+        initLevel2Game();
+    }
 }
 
 function getRank(score) {
@@ -379,6 +563,7 @@ function getRank(score) {
 }
 
 function restartGame() {
+    hideLevelProgress(); 
     showScreen('welcome');
 }
 
@@ -487,7 +672,13 @@ function createStickFigureSVG(type, flipped = false) {
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize particles
     initParticles();
-    
+        const currentLevelToggle = document.getElementById('current-level-toggle');
+    if (currentLevelToggle) {
+        currentLevelToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            toggleLevelProgress();
+        });
+    }
     // Keyboard navigation
     document.addEventListener('keydown', (e) => {
         if (screens.game.classList.contains('active') && !gameState.isAnimating) {

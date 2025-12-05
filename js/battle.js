@@ -311,4 +311,165 @@ function resetBattleIntro() {
 // Initialize on DOM load
 document.addEventListener('DOMContentLoaded', () => {
     initBattleElements();
-});
+    /* ==========================================
+   Level 2 Game - Question-Driven Battle
+   ========================================== */
+
+let level2QuestionsArray = [];
+let level2CurrentQuestion = 0;
+
+function initLevel2Game() {
+    console.log('initLevel2Game called'); // Debug
+    
+    // Initialize elements
+    initLevel2Elements();
+    
+    // Reset battle state
+    resetLevel2Battle();
+    
+    // Create windows
+    createBuildingWindows(level2Elements.bigtechWindows, 'bigtech');
+    createBuildingWindows(level2Elements.nirdWindows, 'nird');
+    
+    // Get questions
+    if (typeof getLevel2Questions === 'function') {
+        level2QuestionsArray = getLevel2Questions(10);
+        console.log('Loaded questions:', level2QuestionsArray.length); // Debug
+    } else {
+        console.error('getLevel2Questions not found!');
+        return;
+    }
+    
+    level2CurrentQuestion = 0;
+    
+    // Show overlay
+    const overlay = document.getElementById('level2-battle-overlay');
+    console.log('Overlay element:', overlay); // Debug
+    
+    if (overlay) {
+        overlay.style.display = 'flex';
+        overlay.classList.add('active');
+        console.log('Overlay shown'); // Debug
+    } else {
+        console.error('level2-battle-overlay not found in HTML!');
+    }
+    
+    // Show first question after short delay
+    setTimeout(() => {
+        showLevel2Question();
+    }, 500);
+}
+
+function showLevel2Question() {
+    console.log('showLevel2Question called, current:', level2CurrentQuestion); // Debug
+    
+    const questionCloud = document.getElementById('level2-question-cloud');
+    const questionText = document.getElementById('level2-question-text');
+    const questionNumber = document.getElementById('level2-question-number');
+    const choicesContainer = document.getElementById('level2-choices');
+    
+    if (!questionCloud) {
+        console.error('level2-question-cloud not found!');
+        return;
+    }
+    
+    if (level2CurrentQuestion >= level2QuestionsArray.length) {
+        endLevel2Game();
+        return;
+    }
+    
+    const question = level2QuestionsArray[level2CurrentQuestion];
+    
+    // Update display
+    questionNumber.textContent = `Q${level2CurrentQuestion + 1}`;
+    questionText.textContent = question.question;
+    
+    // Generate choices
+    choicesContainer.innerHTML = question.choices.map((choice, index) => `
+        <button class="cloud-choice-btn" onclick="selectLevel2Answer(${index})">
+            <span class="choice-letter">${index === 0 ? 'A' : 'B'}</span>
+            <span class="choice-text">${choice.text}</span>
+        </button>
+    `).join('');
+    
+    // Show cloud
+    questionCloud.style.display = 'block';
+}
+
+function selectLevel2Answer(choiceIndex) {
+    const question = level2QuestionsArray[level2CurrentQuestion];
+    const selectedChoice = question.choices[choiceIndex];
+    const isCorrect = selectedChoice.correct;
+    
+    // Disable buttons
+    document.querySelectorAll('.cloud-choice-btn').forEach((btn, i) => {
+        btn.classList.add('disabled');
+        if (i === choiceIndex) btn.classList.add(isCorrect ? 'correct' : 'wrong');
+        if (!isCorrect && question.choices[i].correct) btn.classList.add('correct');
+    });
+    
+    // Update score
+    gameState.score += selectedChoice.points;
+    if (isCorrect) gameState.correctAnswers++;
+    else gameState.wrongAnswers++;
+    
+    // Attack animation
+    const attacker = isCorrect ? 'nird' : 'bigtech';
+    const damage = Math.floor(Math.random() * 15) + 15;
+    
+    setTimeout(() => {
+        document.getElementById('level2-question-cloud').style.display = 'none';
+        
+        // Update health
+        if (attacker === 'nird') {
+            level2BattleState.bigtechHealth = Math.max(0, level2BattleState.bigtechHealth - damage);
+            level2BattleState.bigtechBuildingDamage = Math.min(100, level2BattleState.bigtechBuildingDamage + damage);
+        } else {
+            level2BattleState.nirdHealth = Math.max(0, level2BattleState.nirdHealth - damage);
+            level2BattleState.nirdBuildingDamage = Math.min(100, level2BattleState.nirdBuildingDamage + damage);
+        }
+        
+        level2BattleState.turn++;
+        updateLevel2Visuals(attacker, attacker === 'nird' ? 'bigtech' : 'nird', damage);
+        
+        // Show result popup
+        setTimeout(() => {
+            showAnswerPopup(isCorrect);
+        }, 1200);
+    }, 800);
+}
+
+function showAnswerPopup(isCorrect) {
+    const popup = document.getElementById('result-popup');
+    document.getElementById('result-icon').textContent = isCorrect ? '🎉' : '😔';
+    document.getElementById('result-title').textContent = isCorrect ? 'NIRD attaque!' : 'Big Tech attaque!';
+    document.getElementById('result-message').textContent = isCorrect 
+        ? 'Bravo! Tu es sur la bonne voie!' 
+        : "C'est pas grave, continue d'apprendre!";
+    popup.classList.add('active');
+}
+
+function closeResultPopup() {
+    document.getElementById('result-popup').classList.remove('active');
+    
+    // Check if game over
+    if (level2BattleState.bigtechHealth <= 0 || level2BattleState.nirdHealth <= 0) {
+        level2BattleState.winner = level2BattleState.bigtechHealth <= 0 ? 'nird' : 'bigtech';
+        showLevel2VictoryScreen();
+        return;
+    }
+    
+    level2CurrentQuestion++;
+    
+    if (level2CurrentQuestion >= level2QuestionsArray.length) {
+        level2BattleState.winner = level2BattleState.bigtechHealth < level2BattleState.nirdHealth ? 'nird' : 'bigtech';
+        showLevel2VictoryScreen();
+    } else {
+        showLevel2Question();
+    }
+}
+}
+
+
+
+);

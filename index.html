@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/animations.css">
     <link rel="stylesheet" href="css/battle-animations.css">
+    <link rel="stylesheet" href="css/level2-battle.css">
     <!-- Caveat Font from Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +19,54 @@
     
     <!-- Main Container -->
     <div class="app-container">
+<!-- Level Progress Tracker (visible during game) -->
+<div class="level-progress collapsed" id="level-progress" style="display: none;">
+    <div class="level-progress-header">
+        <span>📊</span>
+        <span>Your Journey</span>
+    </div>
+    
+    <div class="current-level" id="current-level-toggle">
+        <span class="current-level-icon">⚔️</span>
+        <div class="current-level-text">
+            <span class="current-level-name" id="current-level-name">Level 1: Basics</span>
+            <span class="current-level-desc">In Progress...</span>
+        </div>
+        <span class="expand-icon">▼</span>
+    </div>
+    
+    <div class="next-levels">
+        <div class="next-level-item unlocked" data-level="2" onclick="switchLevel(2)">
+            <span class="level-icon">🛡️</span>
+            <div class="level-info">
+                <span class="level-name">Level 2: Advanced</span>
+                <span class="level-reward">Reward: +100 🪙</span>
+            </div>
+            <span class="lock-icon">🔒</span>
+            <span class="unlock-icon">✓</span>
+        </div>
         
+        <div class="next-level-item locked" data-level="3">
+            <span class="level-icon">👑</span>
+            <div class="level-info">
+                <span class="level-name">Level 3: Expert</span>
+                <span class="level-reward">Reward: +200 🪙</span>
+            </div>
+            <span class="lock-icon">🔒</span>
+            <span class="unlock-icon">✓</span>
+        </div>
+        
+        <div class="next-level-item locked" data-level="4">
+            <span class="level-icon">🏆</span>
+            <div class="level-info">
+                <span class="level-name">Level 4: Master</span>
+                <span class="level-reward">Reward: +500 🪙</span>
+            </div>
+            <span class="lock-icon">🔒</span>
+            <span class="unlock-icon">✓</span>
+        </div>
+    </div>
+</div>
         <!-- Screen 1: Welcome -->
         <section id="welcome-screen" class="screen active">
             <div class="logo-container animate-float">
@@ -376,6 +424,87 @@
     
     <!-- Skip Button -->
     <button class="skip-battle-btn" id="skip-battle" onclick="skipBattle()">Skip ⏭️</button>
+<!-- Level 2 Battle Overlay -->
+<div class="level2-battle-overlay" id="level2-battle-overlay">
+    <div class="level2-battle-header">
+        <h2>🏢 The Digital Battle</h2>
+        <p>Big Tech vs NIRD - Answer wisely!</p>
+    </div>
+    
+    <div class="level2-arena">
+        <!-- Big Tech Side -->
+        <div class="building-side bigtech-side">
+            <div class="building bigtech-building" id="bigtech-building">
+                <div class="building-roof"></div>
+                <div class="building-body">
+                    <div class="windows-grid" id="bigtech-windows"></div>
+                    <div class="building-logo">🏢</div>
+                </div>
+                <div class="building-damage-overlay"></div>
+            </div>
+            <div class="warrior bigtech-warrior" id="bigtech-warrior">
+                <div class="warrior-body"></div>
+                <div class="warrior-weapon">⚔️</div>
+            </div>
+            <div class="health-bar-wrapper">
+                <div class="health-label">Big Tech</div>
+                <div class="health-bar"><div class="health-fill bigtech" id="bigtech-health-fill"></div></div>
+                <div class="health-text" id="bigtech-health-text">100%</div>
+            </div>
+        </div>
+        
+        <!-- VS Badge -->
+        <div class="vs-badge">VS</div>
+        
+        <!-- NIRD Side -->
+        <div class="building-side nird-side">
+            <div class="building nird-building" id="nird-building">
+                <div class="building-roof nird"></div>
+                <div class="building-body nird">
+                    <div class="windows-grid" id="nird-windows"></div>
+                    <div class="building-logo">🌱</div>
+                </div>
+                <div class="building-damage-overlay"></div>
+            </div>
+            <div class="warrior nird-warrior" id="nird-warrior">
+                <div class="warrior-body"></div>
+                <div class="warrior-weapon">🛡️</div>
+            </div>
+            <div class="health-bar-wrapper">
+                <div class="health-label">NIRD</div>
+                <div class="health-bar"><div class="health-fill nird" id="nird-health-fill"></div></div>
+                <div class="health-text" id="nird-health-text">100%</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Question Cloud at Bottom -->
+    <div class="question-cloud" id="level2-question-cloud" style="display: none;">
+        <div class="cloud-shape">
+            <div class="question-number-badge" id="level2-question-number">Q1</div>
+            <h3 class="cloud-question-text" id="level2-question-text">Question appears here...</h3>
+            
+            <div class="cloud-choices" id="level2-choices">
+                <!-- Choices will be injected here -->
+            </div>
+        </div>
+    </div>
+    
+    <div class="level2-controls">
+        <div class="turn-counter">Turn: <span id="level2-turn">0</span></div>
+    </div>
+</div>
+
+<!-- Level 2 Victory Screen -->
+<div class="level2-victory-overlay" id="level2-victory-overlay">
+    <div class="victory-content" id="level2-victory-content">
+        <div class="victory-trophy">🏆</div>
+        <h2 class="victory-title" id="level2-victory-title">Victory!</h2>
+        <p class="victory-winner" id="level2-victory-winner">NIRD Wins!</p>
+        <div class="victory-message" id="level2-victory-message"></div>
+        <button class="btn-primary" onclick="closeLevel2Victory()">Continue →</button>
+    </div>
+</div>
 </div>
 
 <!-- Result Popup (Win/Lose message) -->
@@ -400,10 +529,14 @@
     <audio id="sound-wrong" preload="auto">
         <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2teleQYPaL/teleQJyGr+mV1v" type="audio/wav">
     </audio>
-    
-    <script src="js/questions.js"></script>
-    <script src="js/game.js"></script>
-    <script src="js/battle.js"></script>
-    <script src="js/animations.js"></script>
+   <script src="js/questions.js"></script>
+<!-- <script src="js/questions-level2.js"></script> -->
+
+<script src="js/game.js"></script>
+<script src="js/battle.js"></script>
+<script src="js/questions-level2.js"></script>
+<script src="js/level2-battle.js"></script>
+<!-- <script src="js/level2-battle.js"></script> -->
+<script src="js/animations.js"></script>
 </body>
 </html>

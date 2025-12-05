@@ -429,6 +429,7 @@ const allQuestions = [
     }
 ];
 
+window.questions = [];
 // Function to get random questions for a game session
 function getRandomQuestions(count = 10) {
     const shuffled = [...allQuestions].sort(() => Math.random() - 0.5);
@@ -436,7 +437,7 @@ function getRandomQuestions(count = 10) {
 }
 
 // Current game questions (will be set at game start)
-let questions = [];
+// let questions = [];
 
 // Ranks based on final score
 const ranks = [

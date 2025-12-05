@@ -25,14 +25,14 @@
 /* Battle Arena */
 .battle-arena {
     width: 100%;
-    max-width: 900px;
-    height: 500px;
+    max-width: 800px; /* CHANGE: from 900px to 800px */
+    height: 400px; /* CHANGE: from 500px to 400px */
     position: relative;
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    gap: 80px;
-    padding: 0 60px;
+    gap: 60px; /* CHANGE: from 80px to 60px */
+    padding: 0 40px; /* CHANGE: from 60px to 40px */
 }
 
 /* Ground Line */
@@ -52,7 +52,7 @@
 }
 
 .battle-title h2 {
-    font-size: 3rem;
+    font-size: 2.5rem; /* CHANGE: from 3rem to 2.5rem */
     color: #f0f6fc;
     margin-bottom: 8px;
     text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
@@ -60,7 +60,7 @@
 
 .battle-title p {
     color: #8b949e;
-    font-size: 1.1rem;
+    font-size: 1rem; /* CHANGE: from 1.1rem to 1rem */
 }
 
 /* Fighters Container */
