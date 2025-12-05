@@ -42,7 +42,30 @@ Le projet repose entièrement sur une architecture front-end simple et optimisé
 
      * stockage local des scores et progression (localStorage)
 
-### Arborescence du projet
+ ## Diagramme d’architecture
+ 
+```plaintext
+
+ Utilisateur
+     │
+     ▼
+Interface HTML (index.html)
+     │
+     ├── Quiz Engine (questions.js)
+     │       ├─ Chargement des questions
+     │       ├─ Calcul des scores
+     │       └─ Feedback utilisateur
+     │
+     ├── Labos interactifs (game.js, battle.js)
+     │       ├─ Logique des mini-jeux
+     │       └─ Systèmes d’animations
+     │
+     └── Système graphique (CSS + animations.js)
+             ├─ Effets visuels
+             └─ Responsive design
+```
+
+## 3. Arborescence du projet
 
 ```plaintext
 
