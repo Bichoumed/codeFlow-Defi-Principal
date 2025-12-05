@@ -505,6 +505,8 @@ let level2QuestionsArray = [];
 let level2CurrentQuestion = 0;
 
 function initLevel2Game() {
+    console.log('=== initLevel2Game START ===');
+    
     // Initialize elements
     initLevel2Elements();
     
@@ -512,21 +514,30 @@ function initLevel2Game() {
     resetLevel2Battle();
     
     // Create windows
-    createBuildingWindows(level2Elements.bigtechWindows, 'bigtech');
-    createBuildingWindows(level2Elements.nirdWindows, 'nird');
+    if (level2Elements.bigtechWindows) {
+        createBuildingWindows(level2Elements.bigtechWindows, 'bigtech');
+    }
+    if (level2Elements.nirdWindows) {
+        createBuildingWindows(level2Elements.nirdWindows, 'nird');
+    }
     
-    // Get questions
     // Get questions
     level2QuestionsArray = getLevel2Questions(10);
     level2CurrentQuestion = 0;
     
-    // Show overlay
-    if (level2Elements.overlay) {
-        level2Elements.overlay.classList.add('active');
+    // FORCE show overlay - CRITICAL!
+    const overlay = document.getElementById('level2-battle-overlay');
+    if (overlay) {
+        // Remove any inline display:none
+        overlay.style.cssText = 'display: flex !important; position: fixed !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; z-index: 9999 !important;';
+        overlay.classList.add('active');
+        console.log('Level 2 overlay FORCED visible');
     }
     
     // Show first question
-    showLevel2Question();
+    setTimeout(() => {
+        showLevel2Question();
+    }, 500);
 }
 
 function showLevel2Question() {
