@@ -46,23 +46,27 @@ Le projet repose entièrement sur une architecture front-end simple et optimisé
  
 ```plaintext
 
- Utilisateur
-     │
-     ▼
+Utilisateur
+    │
+    ▼
 Interface HTML (index.html)
-     │
-     ├── Quiz Engine (questions.js)
-     │       ├─ Chargement des questions
-     │       ├─ Calcul des scores
-     │       └─ Feedback utilisateur
-     │
-     ├── Labos interactifs (game.js, battle.js)
-     │       ├─ Logique des mini-jeux
-     │       └─ Systèmes d’animations
-     │
-     └── Système graphique (CSS + animations.js)
-             ├─ Effets visuels
-             └─ Responsive design
+    │
+    ├── Moteur de Quiz
+    │       ├─ questions.js          # Quiz principaux
+    │       └─ questions-level2.js   # Questions du niveau 2
+    │
+    ├── Labos interactifs
+    │       ├─ game.js               # Gestion du flux de jeu
+    │       ├─ battle.js             # Labo 1 : logique du mini-jeu
+    │       └─ level2-battle.js      # Labo 2 ou niveau avancé
+    │
+    └── Système graphique
+            ├─ animations.js
+            ├─ animations.css
+            ├─ battle-animations.css
+            └─ level2-battle.css
+            (effets visuels, transitions, responsive design)
+
 ```
 
 ## 3. Arborescence du projet
@@ -71,20 +75,26 @@ Interface HTML (index.html)
 
 codeFlow-Defi-Principal/
 │
-├── index.html                 # Page principale de la plateforme
+├── index.html                     # Page principale de la plateforme
 │
-├── css/                       # Styles et animations
-│   ├── style.css              # Style général
-│   ├── animations.css         # Animations graphiques
-│   └── battle-animations.css  # Animations spécifiques au mini-jeu "Battle"
+├── css/                           # Styles et animations
+│   ├── style.css                  # Style général
+│   ├── animations.css             # Animations globales
+│   ├── battle-animations.css      # Animations du Labo 1
+│   └── level2-battle.css          # Animations du Labo 2 (nouveau niveau)
 │
-├── js/                        # Logique du jeu + quiz + animations
-│   ├── game.js                # Gestion du jeu principal
-│   ├── battle.js              # Mécanique du mini-jeu (combat/épreuves)
-│   ├── animations.js          # Effets visuels, transitions, feedback
-│   └── questions.js           # Questions du quiz / logique NIRD
+├── js/                            # Logique du jeu, quiz et interactions
+│   ├── game.js                    # Gestion du jeu principal
+│   ├── battle.js                  # Logique du Labo 1 (battle)
+│   ├── level2-battle.js           # Logique du Labo 2 (nouveau niveau)
+│   ├── animations.js              # Effets visuels et transitions
+│   ├── questions.js               # Questions du niveau principal (quiz 1–4)
+│   └── questions-level2.js        # Questions et logique du niveau 2
 │
-└── README.md                  # Documentation du projet
+├── README.md                      # Documentation principale du projet
+└── INTEGRATION-GUIDE.md           # Guide d’intégration (optionnel)
+
+
 
 ```
 
