@@ -185,3 +185,11 @@ Ce projet illustre concrètement les principes du Numérique Inclusif, Responsab
 La plateforme démontre qu’il est possible de créer un outil éducatif à la fois utile, engageant et écoresponsable.
 
 
+
+## License
+
+This project is licensed under the MIT License.  
+See the [LICENSE](./LICENSE) file for more information.
+
+
+
