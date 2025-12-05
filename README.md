@@ -83,11 +83,11 @@ La plateforme comporte 4 quiz éducatifs et 3 laboratoires interactifs, organis�
 
 ### Quiz 2 – Big Tech et modèles économiques
 
- * Dépenses cachées
+ * Coûts élevés : abonnements et licences mensuelles.
 
- * Economie de l’attention
+ * bligation de renouveler le matériel à cause de la fin du support.
 
- * Alternatives responsables
+ * Présentation d’alternatives plus responsables.
 
 ### Quiz 3 – Impact environnemental
 
